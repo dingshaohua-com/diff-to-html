@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet/less" type="text/css" href="./style.less" />
+  </head>
+  <body>
+    <div class="wrapp">
+      <div class="action">
+        <button>开始对比</button>
+      </div>
+      <div class="content">
+        <fieldset class="old">
+          <legend>旧版</legend>
+          <div class="oldContent"></div>
+        </fieldset>
+        <fieldset class="diff">
+          <legend>差异</legend>
+          <div class="diffContent"></div>
+        </fieldset>
+        <fieldset class="new">
+          <legend>新版</legend>
+          <div class="newContent"></div>
+        </fieldset>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/less"></script>
+    <script type="module">
+      import { oldContent, newContent } from "./data.js";
+
+      // 将新旧内容返现到页面中
+      const oldContentEl = document.querySelector(".oldContent");
+      const newContentEl = document.querySelector(".newContent");
+      oldContentEl.innerHTML = oldContent;
+      newContentEl.innerHTML = newContent;
+
+      // 对比新旧内容事件
+      const actionEl = document.querySelector(".action");
+      actionEl.onclick = async () => {
+        const diffContentEl = document.querySelector(".diffContent");
+        // 如果支持worker，开启一个新进程进行对比，这样可以避免阻塞主线程（页面卡顿）,否则就同步
+        const hasWork = typeof Worker !== "undefined";
+        if (hasWork) {
+          const worker = new Worker("./diff.js", { type: "module" });
+          worker.postMessage({ newContent, oldContent });
+          worker.onmessage = (evt) =>
+            (diffContentEl.innerHTML = evt.data.content);
+        } else {
+          const { default: getHTMLDiff } = await import("./diff.js");
+          diffContentEl.innerHTML = getHTMLDiff(oldContent, newContent).content;
+        }
+      };
+    </script>
+  </body>
+</html>

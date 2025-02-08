@@ -1,0 +1,17 @@
+{
+  "name": "diff-to-html",
+  "version": "0.0.1",
+  "main": "src/diff.js",
+  "scripts": {
+    "preview": "http-server"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dingshaohua-com/diff-to-html.git"
+  },
+  "homepage": "https://github.com/dingshaohua-com/diff-to-html#readme"
+}
