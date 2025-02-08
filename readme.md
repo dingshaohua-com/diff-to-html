@@ -28,3 +28,70 @@
 
 源自于[参考一个古老的教程！](https://blog.csdn.net/zjq861124/article/details/8019051)
 
+## 安装
+```shell
+npm install diff-to-html
+```
+
+
+## 使用方式
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .wrapp {
+        display: flex;
+      }
+      .wrapp > div {
+        padding: 10px;
+        margin-left: 10px;
+        border: greenyellow solid 1px;
+      }
+      ins {
+        background-color: #cfc;
+        text-decoration: none;
+      }
+
+      del {
+        color: #999;
+        background-color: #fec8c8;
+      }
+    </style>
+  </head>
+  <div class="wrapp">
+    <div class="oldContent">
+      <span>哈哈</span>
+      <div>嘻嘻</div>
+    </div>
+    <div class="newContent">
+      <span>哈哈</span>
+      <div>呵呵</div>
+      <div>行吧</div>
+    </div>
+  </div>
+  <body>
+    <script type="module">
+      import diffToHtml from "./node_modules/diff-to-html/diff.js";
+
+      const oldContent = document.querySelector(".oldContent").innerHTML;
+      const newContent = document.querySelector(".newContent").innerHTML;
+
+      // 对比新旧内容
+      const diffContent = diffToHtml(oldContent, newContent);
+      // 将差异结果渲染到页面
+      const wrapp = document.querySelector(".wrapp");
+      const divNode = document.createElement("div");
+      divNode.innerHTML = diffContent.content;
+      wrapp.appendChild(divNode);
+    </script>
+  </body>
+</html>
+```
+
+
+## 预览效果
+[点击此处预览](https://dingshaohua-com.github.io/diff-to-html)
